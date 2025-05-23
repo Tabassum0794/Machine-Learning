@@ -1,0 +1,52 @@
+cv=cvpartition(size(data,1),'Holdout',0.3);
+cv=cvpartition(size(data,1),'Holdout',0.8);
+dtn=data(cv.training,:);
+dtt=data(cv.test,:);
+xtn=dtn(:,1:8);
+ytn=dtn(:,9);
+xtt=dtt(:,1:8);
+ytt=dtt(:,9);
+mdl=fitcsvm(xtn,ytn)
+ypred=predict(mdl,xtt)
+xtn=normalize(xtn);
+xtn=table2array(xtn);
+xtt=normalize(xtt);
+xtt=table2array(xtt);
+ytn=table2array(ytn);
+ytt=table2array(ytt);
+cm = confusionmat(ytt,ypred);
+crt= confusionchart(ytt,ypred);
+ac = ((cm(1,1)+cm(2,2)))*100/(cm(1,1)+cm(2,2)+cm(1,2)+cm(2,1))
+
+
+
+
+e=min(diabetes.Glucose):0.01:max(diabetes.Glucose);
+>> f=min(diabetes.BMI):0.01:max(diabetes.BMI);
+>> [x1 x2]=meshgrid(e,f);
+>> x = [x1(:) x2(:)];
+>> ms=predict(mdl,x);
+   77.8261
+
+
+
+ stnd_glucose=(diabetes.Glucose-mean(diabetes.Glucose))/std(diabetes.Glucose);
+>> diabetes.Glucose=stnd_glucose;
+>> stnd_BMI=(diabetes.BMI-mean(diabetes.BMI))/std(diabetes.BMI);
+>> diabetes.BMI=stnd_BMI;
+>> mdl=fitcsvm(diabetes,'Outcome~Glucose+BMI');
+>> e=min(diabetes.Glucose):0.01:max(diabetes.Glucose);
+>> f=min(diabetes.BMI):0.01:max(diabetes.BMI);
+>> [x1 x2]=meshgrid(e,f);
+>> x = [x1(:) x2(:)];
+>> ms=predict(mdl,x);
+gscatter(x1(:),x2(:),ms,'cym');
+hold on;
+gscatter(diabetes.Glucose,diabetes.BMI,diabetes.Outcome,'rgb','.',30);
+title('SVM classification');
+
+
+
+xlabel('x')
+ylabel('cos(5x)')
+
